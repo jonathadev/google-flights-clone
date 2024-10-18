@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Button, TextField, Container, Grid, Typography, CircularProgress } from '@mui/material';
+import { Button, TextField, Container, Grid, Typography, CircularProgress, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 
 function FlightSearchForm() {
   const [origin, setOrigin] = useState('');
@@ -8,6 +8,8 @@ function FlightSearchForm() {
   const [fromDate, setFromDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [flights, setFlights] = useState([]);
+  const [filteredGroup, setFilteredGroup] = useState('all');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,14 +33,12 @@ function FlightSearchForm() {
     try {
       const response = await axios.request(options);
       console.log('Resposta da API:', response.data);
-
-      // Acessando as informações de voos
-      const flightData = response.data.data.flights;
-      if (flightData && flightData.days) {
-        console.log('Dados de dias:', flightData.days); // Log para inspecionar a estrutura
-        setFlights(flightData.days);
+      // Ajuste para acessar a estrutura correta
+      if (response.data && response.data.data && response.data.data.flights) {
+        setFlights(response.data.data.flights.days || []); // Acesse a propriedade "days" ou um array vazio
       } else {
-        setFlights([]); // Nenhum voo encontrado
+        console.error('Dados de voo não disponíveis.');
+        setFlights([]);
       }
       setLoading(false);
     } catch (error) {
@@ -46,6 +46,24 @@ function FlightSearchForm() {
       setLoading(false);
     }
   };
+
+  const handleFilterChange = (event) => {
+    setFilteredGroup(event.target.value);
+  };
+
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value);
+  };
+
+  // Filtra os voos com base no grupo selecionado
+  const filteredFlights = (flights || []).filter(flight => 
+    filteredGroup === 'all' || flight.group === filteredGroup
+  );
+
+  // Ordena os voos com base no preço
+  const sortedFlights = filteredFlights.sort((a, b) => {
+    return sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
+  });
 
   return (
     <Container>
@@ -85,16 +103,42 @@ function FlightSearchForm() {
         </Grid>
       </form>
 
+      <FormControl fullWidth style={{ marginTop: '20px' }}>
+        <InputLabel>Filtrar por Grupo</InputLabel>
+        <Select
+          value={filteredGroup}
+          onChange={handleFilterChange}
+          label="Filtrar por Grupo"
+        >
+          <MenuItem value="all">Todos</MenuItem>
+          <MenuItem value="low">Baixo</MenuItem>
+          <MenuItem value="medium">Médio</MenuItem>
+          <MenuItem value="high">Alto</MenuItem>
+        </Select>
+      </FormControl>
+
+      <FormControl fullWidth style={{ marginTop: '20px' }}>
+        <InputLabel>Ordenar por Preço</InputLabel>
+        <Select
+          value={sortOrder}
+          onChange={handleSortChange}
+          label="Ordenar por Preço"
+        >
+          <MenuItem value="asc">Crescente</MenuItem>
+          <MenuItem value="desc">Decrescente</MenuItem>
+        </Select>
+      </FormControl>
+
       {loading ? (
         <CircularProgress />
       ) : (
-        flights.length > 0 && (
+        sortedFlights.length > 0 && (
           <div>
             <Typography variant="h6" gutterBottom>
               Resultados da busca:
             </Typography>
             <ul>
-              {flights.map((flight, index) => (
+              {sortedFlights.map((flight, index) => (
                 <li key={index}>
                   Data: {flight.day} - Preço: {flight.price} USD - Grupo: {flight.group}
                 </li>
