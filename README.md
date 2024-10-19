@@ -23,6 +23,10 @@ Uma aplicação em React que permite aos usuários buscar voos com base em orige
 para teste no postman
 [https://web.postman.co/workspace/My-Workspace~ae01232b-9d25-429e-81a8-31a4152cd820](https://aviationstack.p.rapidapi.com/api/v1/flights/getPriceCalendar?fromDate=2024-10-20&originSkyId=LOND&destinationSkyId=NYCA)
 
+![image](https://github.com/user-attachments/assets/5ddbc602-e035-4347-a91d-d33e72cd56b1)
+
+VIDEO NO LOOM https://www.loom.com/share/e81a9b9bbf55490384ec563e3e5c5331?sid=55fe7ae7-9355-4452-82ee-f061286f8a2b
+
 ## Instalação
 
 1. Clone o repositório:
