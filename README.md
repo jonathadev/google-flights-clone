@@ -114,7 +114,8 @@ As buscas salvas podem ser visualizadas diretamente no Local Storage do navegado
 4. Você verá uma lista de pares chave-valor, onde a chave será `'savedSearches'` e o valor será um array com todas as buscas salvas.
 
 Melhorias futuras
-
+retirar grupos? low, medium e high
+Datas bagunçadas/organizar
 Se você quiser implementar uma funcionalidade para visualizar essas buscas salvas na sua aplicação, você pode adicionar um botão para carregar e exibir essas informações de forma amigável ao usuário.
 
 ## Contribuição
