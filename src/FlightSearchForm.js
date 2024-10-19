@@ -1,6 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Button, TextField, Container, Grid, Typography, CircularProgress, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { 
+  Button, 
+  TextField, 
+  Container, 
+  Grid, 
+  Typography, 
+  CircularProgress, 
+  MenuItem, 
+  Select, 
+  FormControl, 
+  InputLabel, 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableContainer, 
+  TableHead, 
+  TableRow, 
+  Paper 
+} from '@mui/material';
 
 function FlightSearchForm() {
   const [origin, setOrigin] = useState('');
@@ -10,10 +28,12 @@ function FlightSearchForm() {
   const [flights, setFlights] = useState([]);
   const [filteredGroup, setFilteredGroup] = useState('all');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [searched, setSearched] = useState(false); // Novo estado para rastrear se a busca foi feita
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setSearched(true); // Define que a busca foi tentada
 
     const options = {
       method: 'GET',
@@ -33,9 +53,15 @@ function FlightSearchForm() {
     try {
       const response = await axios.request(options);
       console.log('Resposta da API:', response.data);
-      // Ajuste para acessar a estrutura correta
-      if (response.data && response.data.data && response.data.data.flights) {
-        setFlights(response.data.data.flights.days || []); // Acesse a propriedade "days" ou um array vazio
+
+      if (
+        response.data &&
+        response.data.status === true &&
+        response.data.data &&
+        response.data.data.flights &&
+        response.data.data.flights.days
+      ) {
+        setFlights(response.data.data.flights.days || []);
       } else {
         console.error('Dados de voo não disponíveis.');
         setFlights([]);
@@ -64,6 +90,14 @@ function FlightSearchForm() {
   const sortedFlights = filteredFlights.sort((a, b) => {
     return sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
   });
+
+  const saveSearch = () => {
+    const searchData = { origin, destination, fromDate };
+    const savedSearches = JSON.parse(localStorage.getItem('savedSearches')) || [];
+    savedSearches.push(searchData);
+    localStorage.setItem('savedSearches', JSON.stringify(savedSearches));
+    alert('Busca salva!');
+  };
 
   return (
     <Container>
@@ -132,20 +166,41 @@ function FlightSearchForm() {
       {loading ? (
         <CircularProgress />
       ) : (
-        sortedFlights.length > 0 && (
-          <div>
-            <Typography variant="h6" gutterBottom>
-              Resultados da busca:
-            </Typography>
-            <ul>
-              {sortedFlights.map((flight, index) => (
-                <li key={index}>
-                  Data: {flight.day} - Preço: {flight.price} USD - Grupo: {flight.group}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )
+        <>
+          {searched && sortedFlights.length > 0 ? ( // Verifica se a busca foi feita e há voos
+            <>
+              <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Data</TableCell>
+                      <TableCell>Preço (USD)</TableCell>
+                      <TableCell>Grupo</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {sortedFlights.map((flight, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{flight.day}</TableCell>
+                        <TableCell>{flight.price}</TableCell>
+                        <TableCell>{flight.group}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Button variant="outlined" onClick={saveSearch} fullWidth style={{ marginTop: '20px' }}>
+                Salvar Busca
+              </Button>
+            </>
+          ) : (
+            searched && ( // Mostra a mensagem apenas se a busca foi feita
+              <Typography variant="body1" style={{ marginTop: '20px' }}>
+                Nenhum voo encontrado.
+              </Typography>
+            )
+          )}
+        </>
       )}
     </Container>
   );

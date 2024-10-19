@@ -1,0 +1,36 @@
+
+Hello Jônatha,
+
+
+Thank you for applying for the React Front End Developer role at Spotter. Congratulations on successfully passing our initial screening!
+
+Please create a responsive version of Google Flights using React and https://rapidapi.com/apiheya/api/sky-scrapper. Then create a 3-4 minute loom demo of the code and share the GitHub.
+
+You shouldn't spend more than 8 hours on the assignment. Deadline is within a week, but please send it as soon as completed. Upon completion of the test, please send the links of the github repository and loom presentation and upload it to the question in this message.
+
+--
+Mario LopezVital
+
+Hiring Manager
+Spotter
+Show questions
+
+Olá JNAThee,
+
+
+Obrigado por se candidatar à função de desenvolvedor de front-end do React na Spotter. Parabéns por passar com sucesso em nossa triagem inicial!
+
+Crie uma versão responsiva do Google Flights usando o React e o https://rapidapi.com/apiheya/api/sky-scrapper. Em seguida, crie uma demonstração loom de 3 a 4 minutos do código e compartilhe o GitHub.
+
+Você não deve gastar mais de 8 horas na tarefa. O prazo é de uma semana, mas envie-o assim que concluído. Após a conclusão do teste, envie os links do repositório github e da apresentação do tear e faça o upload para a pergunta nesta mensagem.
+
+--
+Mario LopezVital
+
+Gerente de Contratação
+Observador
+
+Mostrar perguntas
+
+https://spotter.na.teamtailor.com/jobs/68075-front-end-developer-react-material-ui
+https://spotter.na.teamtailor.com/jobs/71657-django-react-full-stack-developer-remote
